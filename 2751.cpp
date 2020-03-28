@@ -39,8 +39,8 @@ int main() {
 	cin >> N;
 	for (int i = 0; i < N; i++)
 		cin >> num[i];
-	jjogaegi(0, N-1);
+	jjogaegi(0, N - 1);
 	for (int i = 0; i < N; i++)
-		cout << num[i] << "\n";
+		cout << num[i] << endl;
 	return 0;
 }
