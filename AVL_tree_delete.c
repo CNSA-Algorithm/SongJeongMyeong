@@ -4,90 +4,90 @@
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 struct avl_node {
-	struct avl_node *left_child, *right_child; // ¿ŞÂÊ, ¿À¸¥ÂÊ ¼­ºê Æ®¸®
-	int data; // ³ëµå ¾ÈÀÇ °ª
+	struct avl_node *left_child, *right_child; // ì™¼ìª½, ì˜¤ë¥¸ìª½ ì„œë¸Œ íŠ¸ë¦¬
+	int data; // ë…¸ë“œ ì•ˆì˜ ê°’
 };
 struct avl_node *root;
 
-struct avl_node* rotate_right(struct avl_node *parent) { // ¿À¸¥ÂÊ È¸Àü ÇÔ¼ö
-	struct avl_node *child = parent->left_child; // ÀÔ·Â ¹ŞÀº ³ëµå(ºÎ¸ğ ³ëµå)ÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» »õ·Î ¸¸µç ³ëµå¿¡ ³ÖÀ½
-	parent->left_child = child->right_child; // ºÎ¸ğ ³ëµåÀÇ ¿ŞÂÊ ÀÚ½Ä ÀÚ¸®¿¡, ºÎ¸ğ ³ëµåÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ¿À¸¥ÂÊ ¼­ºêÆ®¸®¸¦ ³ÖÀ½
-	child->right_child = parent; // »õ·Î ¸¸µç ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½Ä ÀÚ¸®¿¡, ºÎ¸ğ ³ëµå¸¦ ³ÖÀ½
-	return child; // »õ·Î ¸¸µç ³ëµå¸¦ ¹İÈ¯
+struct avl_node* rotate_right(struct avl_node *parent) { // ì˜¤ë¥¸ìª½ íšŒì „ í•¨ìˆ˜
+	struct avl_node *child = parent->left_child; // ì…ë ¥ ë°›ì€ ë…¸ë“œ(ë¶€ëª¨ ë…¸ë“œ)ì˜ ì™¼ìª½ ìì‹ì„ ìƒˆë¡œ ë§Œë“  ë…¸ë“œì— ë„£ìŒ
+	parent->left_child = child->right_child; // ë¶€ëª¨ ë…¸ë“œì˜ ì™¼ìª½ ìì‹ ìë¦¬ì—, ë¶€ëª¨ ë…¸ë“œì˜ ì™¼ìª½ ìì‹ì˜ ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ë¥¼ ë„£ìŒ
+	child->right_child = parent; // ìƒˆë¡œ ë§Œë“  ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ ìë¦¬ì—, ë¶€ëª¨ ë…¸ë“œë¥¼ ë„£ìŒ
+	return child; // ìƒˆë¡œ ë§Œë“  ë…¸ë“œë¥¼ ë°˜í™˜
 }
-struct avl_node* rotate_left(struct avl_node *parent) { // ¿ŞÂÊ È¸Àü ÇÔ¼ö
-	struct avl_node *child = parent->right_child; // ÀÔ·Â ¹ŞÀº ³ëµå(ºÎ¸ğ ³ëµå)ÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» »õ·Î ¸¸µç ³ëµå¿¡ ³ÖÀ½
-	parent->right_child = child->left_child; // ºÎ¸ğ ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½Ä ÀÚ¸®¿¡, ºÎ¸ğ ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ¿ŞÂÊ ¼­ºêÆ®¸®¸¦ ³ÖÀ½
-	child->left_child = parent; // »õ·Î ¸¸µç ³ëµåÀÇ ¿ŞÂÊ ÀÚ½Ä ÀÚ¸®¿¡, ºÎ¸ğ ³ëµå¸¦ ³ÖÀ½
-	return child; // »õ·Î ¸¸µç ³ëµå¸¦ ¹İÈ¯
-}
-
-struct avl_node* rotate_right_left(struct avl_node *parent) { // ¿À¸¥ÂÊ-¿ŞÂÊ È¸Àü ÇÔ¼ö
-	struct avl_node *child = parent->right_child; // ÀÔ·Â ¹ŞÀº ³ëµå(ºÎ¸ğ ³ëµå)ÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» »õ·Î ¸¸µç ³ëµå¿¡ ³ÖÀ½
-	parent->right_child = rotate_right(child); // ºÎ¸ğ ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½Ä ÀÚ¸®¿¡, ºÎ¸ğ ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀ» ¿À¸¥ÂÊ È¸ÀüÇÑ °á°ú °ªÀ» ³ÖÀ½
-	return rotate_left(parent); // ºÎ¸ğ ³ëµå¸¦ ¿ŞÂÊ È¸ÀüÇÑ °á°ú°ª ¹İÈ¯
+struct avl_node* rotate_left(struct avl_node *parent) { // ì™¼ìª½ íšŒì „ í•¨ìˆ˜
+	struct avl_node *child = parent->right_child; // ì…ë ¥ ë°›ì€ ë…¸ë“œ(ë¶€ëª¨ ë…¸ë“œ)ì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ ìƒˆë¡œ ë§Œë“  ë…¸ë“œì— ë„£ìŒ
+	parent->right_child = child->left_child; // ë¶€ëª¨ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ ìë¦¬ì—, ë¶€ëª¨ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ì˜ ì™¼ìª½ ì„œë¸ŒíŠ¸ë¦¬ë¥¼ ë„£ìŒ
+	child->left_child = parent; // ìƒˆë¡œ ë§Œë“  ë…¸ë“œì˜ ì™¼ìª½ ìì‹ ìë¦¬ì—, ë¶€ëª¨ ë…¸ë“œë¥¼ ë„£ìŒ
+	return child; // ìƒˆë¡œ ë§Œë“  ë…¸ë“œë¥¼ ë°˜í™˜
 }
 
-struct avl_node* rotate_left_right(struct avl_node *parent) { // ¿ŞÂÊ-¿À¸¥ÂÊ È¸Àü ÇÔ¼ö
-	struct avl_node *child = parent->left_child; // ÀÔ·Â ¹ŞÀº ³ëµå(ºÎ¸ğ ³ëµå)ÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» »õ·Î ¸¸µç ³ëµå¿¡ ³ÖÀ½
-	parent->left_child = rotate_left(child);// ºÎ¸ğ ³ëµåÀÇ ¿ŞÂÊ ÀÚ½Ä ÀÚ¸®¿¡, ºÎ¸ğ ³ëµåÀÇ ¿ŞÂÊ ÀÚ½ÄÀ» ¿ŞÂÊ È¸ÀüÇÑ °á°ú °ªÀ» ³ÖÀ½
-	return rotate_right(parent); // ºÎ¸ğ ³ëµå¸¦ ¿À¸¥ÂÊ È¸ÀüÇÑ °á°ú°ª ¹İÈ¯
+struct avl_node* rotate_right_left(struct avl_node *parent) { // ì˜¤ë¥¸ìª½-ì™¼ìª½ íšŒì „ í•¨ìˆ˜
+	struct avl_node *child = parent->right_child; // ì…ë ¥ ë°›ì€ ë…¸ë“œ(ë¶€ëª¨ ë…¸ë“œ)ì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ ìƒˆë¡œ ë§Œë“  ë…¸ë“œì— ë„£ìŒ
+	parent->right_child = rotate_right(child); // ë¶€ëª¨ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ ìë¦¬ì—, ë¶€ëª¨ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ì„ ì˜¤ë¥¸ìª½ íšŒì „í•œ ê²°ê³¼ ê°’ì„ ë„£ìŒ
+	return rotate_left(parent); // ë¶€ëª¨ ë…¸ë“œë¥¼ ì™¼ìª½ íšŒì „í•œ ê²°ê³¼ê°’ ë°˜í™˜
 }
 
-int get_height(struct avl_node *node) { // Æ®¸®ÀÇ ³ôÀÌ¸¦ ±¸ÇÏ´Â ÇÔ¼ö
+struct avl_node* rotate_left_right(struct avl_node *parent) { // ì™¼ìª½-ì˜¤ë¥¸ìª½ íšŒì „ í•¨ìˆ˜
+	struct avl_node *child = parent->left_child; // ì…ë ¥ ë°›ì€ ë…¸ë“œ(ë¶€ëª¨ ë…¸ë“œ)ì˜ ì™¼ìª½ ìì‹ì„ ìƒˆë¡œ ë§Œë“  ë…¸ë“œì— ë„£ìŒ
+	parent->left_child = rotate_left(child);// ë¶€ëª¨ ë…¸ë“œì˜ ì™¼ìª½ ìì‹ ìë¦¬ì—, ë¶€ëª¨ ë…¸ë“œì˜ ì™¼ìª½ ìì‹ì„ ì™¼ìª½ íšŒì „í•œ ê²°ê³¼ ê°’ì„ ë„£ìŒ
+	return rotate_right(parent); // ë¶€ëª¨ ë…¸ë“œë¥¼ ì˜¤ë¥¸ìª½ íšŒì „í•œ ê²°ê³¼ê°’ ë°˜í™˜
+}
+
+int get_height(struct avl_node *node) { // íŠ¸ë¦¬ì˜ ë†’ì´ë¥¼ êµ¬í•˜ëŠ” í•¨ìˆ˜
 	int height = 0;
-	if (node != NULL) // ³ëµå°¡ NULLÀÌ¸é 0À» ¹İÈ¯
-		height = 1 + max(get_height(node->left_child), get_height(node->right_child)); // ÇöÀç ³ëµåÀÇ ³ôÀÌ = ÀÚ½Ä ³ëµåÀÇ ³ôÀÌ Áß Å« °ª + 1
+	if (node != NULL) // ë…¸ë“œê°€ NULLì´ë©´ 0ì„ ë°˜í™˜
+		height = 1 + max(get_height(node->left_child), get_height(node->right_child)); // í˜„ì¬ ë…¸ë“œì˜ ë†’ì´ = ìì‹ ë…¸ë“œì˜ ë†’ì´ ì¤‘ í° ê°’ + 1
 	return height;
 }
 
-int get_height_diff(struct avl_node *node) { // ±ÕÇü ÀÎ¼ö¸¦ ±¸ÇÏ´Â ÇÔ¼ö
+int get_height_diff(struct avl_node *node) { // ê· í˜• ì¸ìˆ˜ë¥¼ êµ¬í•˜ëŠ” í•¨ìˆ˜
 	if (node == NULL)
 		return 0;
-	return get_height(node->left_child) - get_height(node->right_child); // ±ÕÇü ÀÎ¼ö = ¿ŞÂÊ ¼­ºê Æ®¸®ÀÇ ³ôÀÌ - ¿À¸¥ÂÊ ¼­ºê Æ®¸®ÀÇ ³ôÀÌ
+	return get_height(node->left_child) - get_height(node->right_child); // ê· í˜• ì¸ìˆ˜ = ì™¼ìª½ ì„œë¸Œ íŠ¸ë¦¬ì˜ ë†’ì´ - ì˜¤ë¥¸ìª½ ì„œë¸Œ íŠ¸ë¦¬ì˜ ë†’ì´
 }
 
-struct avl_node* rebalance(struct avl_node **node) { // ±ÕÇüÀ» À§ÇØ Àç¹èÄ¡ÇÏ´Â ÇÔ¼ö
-	int height_diff = get_height_diff(*node); // ±ÕÇü ÀÎ¼ö¸¦ ±¸ÇÔ
-	if (height_diff > 1) { // ±ÕÇü ÀÎ¼ö°¡ 1º¸´Ù Å¬ ¶§ (¿ŞÂÊ ¼­ºê Æ®¸®ÀÇ ³ôÀÌ°¡ ´õ Å¬ ¶§)
-		if (get_height_diff((*node)->left_child) > 0) // ÇØ´ç ³ëµåÀÇ ¿ŞÂÊ ÀÚ½ÄÀÇ ±ÕÇü ÀÎ¼ö°¡ 0º¸´Ù Å¬ ¶§ (LLÅ¸ÀÔ)
-			*node = rotate_right(*node); // ¿À¸¥ÂÊ È¸Àü
-		else // (LR Å¸ÀÔ)
-			*node = rotate_left_right(*node); // ¿ŞÂÊ-¿À¸¥ÂÊ È¸Àü
+struct avl_node* rebalance(struct avl_node **node) { // ê· í˜•ì„ ìœ„í•´ ì¬ë°°ì¹˜í•˜ëŠ” í•¨ìˆ˜
+	int height_diff = get_height_diff(*node); // ê· í˜• ì¸ìˆ˜ë¥¼ êµ¬í•¨
+	if (height_diff > 1) { // ê· í˜• ì¸ìˆ˜ê°€ 1ë³´ë‹¤ í´ ë•Œ (ì™¼ìª½ ì„œë¸Œ íŠ¸ë¦¬ì˜ ë†’ì´ê°€ ë” í´ ë•Œ)
+		if (get_height_diff((*node)->left_child) > 0) // í•´ë‹¹ ë…¸ë“œì˜ ì™¼ìª½ ìì‹ì˜ ê· í˜• ì¸ìˆ˜ê°€ 0ë³´ë‹¤ í´ ë•Œ (LLíƒ€ì…)
+			*node = rotate_right(*node); // ì˜¤ë¥¸ìª½ íšŒì „
+		else // (LR íƒ€ì…)
+			*node = rotate_left_right(*node); // ì™¼ìª½-ì˜¤ë¥¸ìª½ íšŒì „
 	}
-	else if (height_diff < -1) { // ±ÕÇü ÀÎ¼ö°¡ -1º¸´Ù ÀÛÀ» ¶§ (¿À¸¥ÂÊ ¼­ºê Æ®¸®ÀÇ ³ôÀÌ°¡ ´õ Å¬ ¶§)
-		if (get_height_diff((*node)->right_child) < 0) // ÇØ´ç ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÇ ±ÕÇü ÀÎ¼ö°¡ 0º¸´Ù ÀÛÀ» ¶§ (RRÅ¸ÀÔ)
-			*node = rotate_left(*node); // ¿ŞÂÊ È¸Àü
-		else // (RL Å¸ÀÔ)
-			*node = rotate_right_left(*node); // ¿À¸¥ÂÊ-¿ŞÂÊ È¸Àü
+	else if (height_diff < -1) { // ê· í˜• ì¸ìˆ˜ê°€ -1ë³´ë‹¤ ì‘ì„ ë•Œ (ì˜¤ë¥¸ìª½ ì„œë¸Œ íŠ¸ë¦¬ì˜ ë†’ì´ê°€ ë” í´ ë•Œ)
+		if (get_height_diff((*node)->right_child) < 0) // í•´ë‹¹ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ì˜ ê· í˜• ì¸ìˆ˜ê°€ 0ë³´ë‹¤ ì‘ì„ ë•Œ (RRíƒ€ì…)
+			*node = rotate_left(*node); // ì™¼ìª½ íšŒì „
+		else // (RL íƒ€ì…)
+			*node = rotate_right_left(*node); // ì˜¤ë¥¸ìª½-ì™¼ìª½ íšŒì „
 	}
 	return *node;
 }
 
-struct avl_node* avl_add(struct avl_node** root, int new_key) { // »ğÀÔ ÇÔ¼ö
-	if (*root == NULL) { // ¾Æ¹« °Íµµ ¾ø´Â °æ¿ì
-		*root = (struct avl_node*)malloc(sizeof(struct avl_node)); // µ¿ÀûÇÒ´ç
-		if (*root == NULL) // µ¿ÀûÇÒ´ç ¿À·ù ½Ã Å»Ãâ
+struct avl_node* avl_add(struct avl_node** root, int new_key) { // ì‚½ì… í•¨ìˆ˜
+	if (*root == NULL) { // ì•„ë¬´ ê²ƒë„ ì—†ëŠ” ê²½ìš°
+		*root = (struct avl_node*)malloc(sizeof(struct avl_node)); // ë™ì í• ë‹¹
+		if (*root == NULL) // ë™ì í• ë‹¹ ì˜¤ë¥˜ ì‹œ íƒˆì¶œ
 			exit(1);
-		(*root)->data = new_key; // µ¿ÀûÇÒ´ç µÈ node¿¡ °ªÀ» ³ÖÀ½
-		(*root)->left_child = (*root)->right_child = NULL; // ¼­ºê Æ®¸®¸¦ NULL·Î ÃÊ±âÈ­
+		(*root)->data = new_key; // ë™ì í• ë‹¹ ëœ nodeì— ê°’ì„ ë„£ìŒ
+		(*root)->left_child = (*root)->right_child = NULL; // ì„œë¸Œ íŠ¸ë¦¬ë¥¼ NULLë¡œ ì´ˆê¸°í™”
 	}
-	else if (new_key < (*root)->data) { // ³ÖÀ» °ªÀÌ ÇØ´ç ³ëµåÀÇ °ªº¸´Ù ÀÛÀº °æ¿ì
-		(*root)->left_child = avl_add(&((*root)->left_child), new_key); // ÇØ´ç ³ëµåÀÇ ¿ŞÂÊ ¼­ºê Æ®¸®¿¡ ´ëÇØ Àç±Í ÇÔ¼ö µ¿ÀÛ
-		*root = rebalance(root); // Àç¹èÄ¡ ÇÔ¼ö¸¦ ÅëÇØ ±ÕÇüÀ» ¸ÂÃçÁÜ
+	else if (new_key < (*root)->data) { // ë„£ì„ ê°’ì´ í•´ë‹¹ ë…¸ë“œì˜ ê°’ë³´ë‹¤ ì‘ì€ ê²½ìš°
+		(*root)->left_child = avl_add(&((*root)->left_child), new_key); // í•´ë‹¹ ë…¸ë“œì˜ ì™¼ìª½ ì„œë¸Œ íŠ¸ë¦¬ì— ëŒ€í•´ ì¬ê·€ í•¨ìˆ˜ ë™ì‘
+		*root = rebalance(root); // ì¬ë°°ì¹˜ í•¨ìˆ˜ë¥¼ í†µí•´ ê· í˜•ì„ ë§ì¶°ì¤Œ
 	}
-	else if (new_key > (*root)->data) { // ³ÖÀ» °ªÀÌ ÇØ´ç ³ëµåÀÇ °ªº¸´Ù Å« °æ¿ì
-		(*root)->right_child = avl_add(&((*root)->right_child), new_key); // ÇØ´ç ³ëµåÀÇ ¿À¸¥ÂÊ ¼­ºê Æ®¸®¿¡ ´ëÇØ Àç±Í ÇÔ¼ö µ¿ÀÛ
-		*root = rebalance(root); // Àç¹èÄ¡ ÇÔ¼ö¸¦ ÅëÇØ ±ÕÇüÀ» ¸ÂÃçÁÜ
+	else if (new_key > (*root)->data) { // ë„£ì„ ê°’ì´ í•´ë‹¹ ë…¸ë“œì˜ ê°’ë³´ë‹¤ í° ê²½ìš°
+		(*root)->right_child = avl_add(&((*root)->right_child), new_key); // í•´ë‹¹ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ì„œë¸Œ íŠ¸ë¦¬ì— ëŒ€í•´ ì¬ê·€ í•¨ìˆ˜ ë™ì‘
+		*root = rebalance(root); // ì¬ë°°ì¹˜ í•¨ìˆ˜ë¥¼ í†µí•´ ê· í˜•ì„ ë§ì¶°ì¤Œ
 	}
-	else { // ³ÖÀ» °ªÀÌ ÇØ´ç ³ëµåÀÇ °ª°ú °°´Ù¸é
-		exit(1); // Å»Ãâ
+	else { // ë„£ì„ ê°’ì´ í•´ë‹¹ ë…¸ë“œì˜ ê°’ê³¼ ê°™ë‹¤ë©´
+		exit(1); // íƒˆì¶œ
 	}
 	return *root;
 }
 
-void display(struct avl_node *node) { // Æ®¸® Ãâ·Â ÇÔ¼ö
-	if (node != NULL) { // inorder Çü½ÄÀ¸·Î Ãâ·Â
+void display(struct avl_node *node) { // íŠ¸ë¦¬ ì¶œë ¥ í•¨ìˆ˜
+	if (node != NULL) { // inorder í˜•ì‹ìœ¼ë¡œ ì¶œë ¥
 		printf("(");
 		display(node->left_child);
 		printf("%d", node->data);
@@ -96,30 +96,30 @@ void display(struct avl_node *node) { // Æ®¸® Ãâ·Â ÇÔ¼ö
 	}
 }
 
-struct avl_node* avl_delete(struct avl_node **root, int new_key) { // »èÁ¦ ÇÔ¼ö
+struct avl_node* avl_delete(struct avl_node **root, int new_key) { // ì‚­ì œ í•¨ìˆ˜
 	struct avl_node* tmp;
-	if (root == NULL) // ³ëµå°¡ ¾ø´Â °æ¿ì
-		exit(1); // Å»Ãâ
-	else if ((*root)->data > new_key) // ³ëµå ¾ÈÀÇ °ªÀÌ »èÁ¦ÇÒ °ªº¸´Ù Å« °æ¿ì
-		(*root)->left_child = avl_delete(&((*root)->left_child), new_key); // ÇØ´ç ³ëµåÀÇ ¿ŞÂÊ ¼­ºê Æ®¸®¿¡ ´ëÇØ Àç±Í ÇÔ¼ö µ¿ÀÛ
-	else if ((*root)->data < new_key) // ³ëµå ¾ÈÀÇ °ªÀÌ »èÁ¦ÇÒ °ªº¸´Ù ÀÛÀº °æ¿ì
-		(*root)->right_child = avl_delete(&((*root)->right_child), new_key); // ÇØ´ç ³ëµåÀÇ ¿À¸¥ÂÊ ¼­ºê Æ®¸®¿¡ ´ëÇØ Àç±Í ÇÔ¼ö µ¿ÀÛ
-	else if ((*root)->left_child && (*root)->right_child) { // »èÁ¦ÇÒ °ªÀ» Ã£¾Ò´Âµ¥ ±× ³ëµåÀÇ ÀÚ½ÄÀÌ 2°³ ´Ù ÀÖ´Â °æ¿ì
-		tmp = (*root)->right_child; // »èÁ¦ÇÒ ³ëµåÀÇ ¿À¸¥ÂÊ ¼­ºêÆ®¸®¸¦ ÀÓ½Ã·Î ÀúÀå
-		while (tmp->left_child != NULL) // ÀÓ½Ã·Î ÀúÀåÇÑ ¼­ºêÆ®¸®ÀÇ °¡Àå (¿ŞÂÊ) ÀÛÀº °ªÀ» °¡Áø ³ëµå±îÁö °¡µµ·Ï ¹İº¹¹®À» µ¹¸²
+	if (root == NULL) // ë…¸ë“œê°€ ì—†ëŠ” ê²½ìš°
+		exit(1); // íƒˆì¶œ
+	else if ((*root)->data > new_key) // ë…¸ë“œ ì•ˆì˜ ê°’ì´ ì‚­ì œí•  ê°’ë³´ë‹¤ í° ê²½ìš°
+		(*root)->left_child = avl_delete(&((*root)->left_child), new_key); // í•´ë‹¹ ë…¸ë“œì˜ ì™¼ìª½ ì„œë¸Œ íŠ¸ë¦¬ì— ëŒ€í•´ ì¬ê·€ í•¨ìˆ˜ ë™ì‘
+	else if ((*root)->data < new_key) // ë…¸ë“œ ì•ˆì˜ ê°’ì´ ì‚­ì œí•  ê°’ë³´ë‹¤ ì‘ì€ ê²½ìš°
+		(*root)->right_child = avl_delete(&((*root)->right_child), new_key); // í•´ë‹¹ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ì„œë¸Œ íŠ¸ë¦¬ì— ëŒ€í•´ ì¬ê·€ í•¨ìˆ˜ ë™ì‘
+	else if ((*root)->left_child && (*root)->right_child) { // ì‚­ì œí•  ê°’ì„ ì°¾ì•˜ëŠ”ë° ê·¸ ë…¸ë“œì˜ ìì‹ì´ 2ê°œ ë‹¤ ìˆëŠ” ê²½ìš°
+		tmp = (*root)->right_child; // ì‚­ì œí•  ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ë¥¼ ì„ì‹œë¡œ ì €ì¥
+		while (tmp->left_child != NULL) // ì„ì‹œë¡œ ì €ì¥í•œ ì„œë¸ŒíŠ¸ë¦¬ì˜ ê°€ì¥ (ì™¼ìª½) ì‘ì€ ê°’ì„ ê°€ì§„ ë…¸ë“œê¹Œì§€ ê°€ë„ë¡ ë°˜ë³µë¬¸ì„ ëŒë¦¼
 			tmp = tmp->left_child;
-		(*root)->data = tmp->data; // »èÁ¦ÇÒ ³ëµå¿¡ ÀÓ½Ã·Î ÀúÀåÇÑ ³ëµåÀÇ °ªÀ» ³ÖÀ½
-		(*root)->right_child = avl_delete(&((*root)->right_child), (*root)->data); // »èÁ¦ÇÒ ³ëµåÀÇ ¿À¸¥ÂÊ ¼­ºêÆ®¸®¿¡¼­ °¡Àå ÀÛÀº °ªÀÌ µé¾îÀÖ´ø ³ëµå¸¦ Àç±Í ÇÔ¼ö¸¦ ÅëÇØ »èÁ¦
+		(*root)->data = tmp->data; // ì‚­ì œí•  ë…¸ë“œì— ì„ì‹œë¡œ ì €ì¥í•œ ë…¸ë“œì˜ ê°’ì„ ë„£ìŒ
+		(*root)->right_child = avl_delete(&((*root)->right_child), (*root)->data); // ì‚­ì œí•  ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ì„œë¸ŒíŠ¸ë¦¬ì—ì„œ ê°€ì¥ ì‘ì€ ê°’ì´ ë“¤ì–´ìˆë˜ ë…¸ë“œë¥¼ ì¬ê·€ í•¨ìˆ˜ë¥¼ í†µí•´ ì‚­ì œ
 	}
-	else { // »èÁ¦ÇÒ °ªÀ» Ã£¾Ò´Âµ¥ ±× ³ëµåÀÇ ÀÚ½ÄÀÌ 1°³¶Ç´Â 0°³ÀÎ °æ¿ì
-		tmp = (*root); // »èÁ¦ÇÒ ³ëµå¸¦ ÀÓ½Ã·Î ÀúÀå
-		if ((*root)->left_child == NULL) // »èÁ¦ÇÒ ³ëµåÀÇ ¿ŞÂÊ ÀÚ½ÄÀÌ ¾ø´Â °æ¿ì
-			(*root) = (*root)->right_child; // »èÁ¦ÇÒ ³ëµå À§Ä¡¿¡ »èÁ¦ÇÒ ³ëµåÀÇ ¿À¸¥ÂÊ ¼­ºê Æ®¸®¸¦ ³ÖÀ½
-		else if ((*root)->right_child == NULL) // »èÁ¦ÇÒ ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½ÄÀÌ ¾ø´Â °æ¿ì
-			(*root) = (*root)->left_child; // »èÁ¦ÇÒ ³ëµå À§Ä¡¿¡ »èÁ¦ÇÒ ³ëµåÀÇ ¿ŞÂÊ ¼­ºê Æ®¸®¸¦ ³ÖÀ½
-		free(tmp); // »èÁ¦ÇÒ ³ëµåÀÇ ¸Ş¸ğ¸® ÇØÁ¦
+	else { // ì‚­ì œí•  ê°’ì„ ì°¾ì•˜ëŠ”ë° ê·¸ ë…¸ë“œì˜ ìì‹ì´ 1ê°œë˜ëŠ” 0ê°œì¸ ê²½ìš°
+		tmp = (*root); // ì‚­ì œí•  ë…¸ë“œë¥¼ ì„ì‹œë¡œ ì €ì¥
+		if ((*root)->left_child == NULL) // ì‚­ì œí•  ë…¸ë“œì˜ ì™¼ìª½ ìì‹ì´ ì—†ëŠ” ê²½ìš°
+			(*root) = (*root)->right_child; // ì‚­ì œí•  ë…¸ë“œ ìœ„ì¹˜ì— ì‚­ì œí•  ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ì„œë¸Œ íŠ¸ë¦¬ë¥¼ ë„£ìŒ
+		else if ((*root)->right_child == NULL) // ì‚­ì œí•  ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ ìì‹ì´ ì—†ëŠ” ê²½ìš°
+			(*root) = (*root)->left_child; // ì‚­ì œí•  ë…¸ë“œ ìœ„ì¹˜ì— ì‚­ì œí•  ë…¸ë“œì˜ ì™¼ìª½ ì„œë¸Œ íŠ¸ë¦¬ë¥¼ ë„£ìŒ
+		free(tmp); // ì‚­ì œí•  ë…¸ë“œì˜ ë©”ëª¨ë¦¬ í•´ì œ
 	}
-	*root = rebalance(root); // Àç¹èÄ¡ ÇÔ¼ö¸¦ ÅëÇØ ±ÕÇüÀ» ¸ÂÃçÁÜ
+	*root = rebalance(root); // ì¬ë°°ì¹˜ í•¨ìˆ˜ë¥¼ í†µí•´ ê· í˜•ì„ ë§ì¶°ì¤Œ
 	return *root;
 }
 
@@ -133,6 +133,7 @@ int main() {
 	avl_add(&root, 3);
 	avl_add(&root, 6);
 	avl_add(&root, 4);
+	avl_delete(&root, 9);
 	display(root);
 	return 0;
 }
